@@ -1,0 +1,101 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <h2 class="mb-4">Publicaciones</h2>
+
+      @if (!auth.logueado()) {
+        <div class="card-soft p-5 text-center">
+          <i class="bi bi-person-lock display-4 text-muted"></i>
+          <h5 class="mt-3">Ingresá para ver las publicaciones</h5>
+          <a routerLink="/login" class="btn btn-brand mt-2">Ingresar</a>
+        </div>
+      } @else {
+        <form class="card-soft p-3 p-md-4 mb-4" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
+          <h5 class="mb-3">Nueva publicación</h5>
+
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input id="titulo" class="form-control" formControlName="titulo" maxlength="100" />
+            @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+              <div class="field-error">El título es obligatorio (máx. 100 caracteres)</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="mensaje" class="form-label">Mensaje</label>
+            <textarea id="mensaje" class="form-control" rows="3" formControlName="mensaje" maxlength="1000"></textarea>
+            @if (form.controls.mensaje.touched && form.controls.mensaje.invalid) {
+              <div class="field-error">El mensaje es obligatorio (máx. 1000 caracteres)</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen (opcional, máx. 3MB)</label>
+            <input id="imagen" type="file" accept="image/*" class="form-control" (change)="elegirImagen($event)" />
+          </div>
+
+          <button type="submit" class="btn btn-brand" [disabled]="publicando()">
+            {{ publicando() ? 'Publicando...' : 'Publicar' }}
+          </button>
+        </form>
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="text-muted">Ordenar por:</span>
+          <div class="btn-group btn-group-sm" role="group">
+            <button
+              type="button"
+              class="btn"
+              [class.btn-brand]="orden() === 'fecha'"
+              [class.btn-outline-secondary]="orden() !== 'fecha'"
+              (click)="cambiarOrden('fecha')"
+            >
+              Más recientes
+            </button>
+            <button
+              type="button"
+              class="btn"
+              [class.btn-brand]="orden() === 'likes'"
+              [class.btn-outline-secondary]="orden() !== 'likes'"
+              (click)="cambiarOrden('likes')"
+            >
+              Más me gusta
+            </button>
+          </div>
+        </div>
+
+        @if (cargando() && publicaciones().length === 0) {
+          <p class="text-muted text-center">Cargando...</p>
+        } @else if (publicaciones().length === 0) {
+          <div class="card-soft p-5 text-center">
+            <i class="bi bi-chat-square-text display-4 text-muted"></i>
+            <h5 class="mt-3">Todavía no hay publicaciones</h5>
+            <p class="text-muted mb-0">Sé el primero en publicar.</p>
+          </div>
+        } @else {
+          @for (p of publicaciones(); track p.id) {
+            <app-post-card
+              [publicacion]="p"
+              [puedeEliminar]="puedeEliminar(p)"
+              (alternarLike)="alternarLike($event)"
+              (eliminar)="eliminar($event)"
+            />
+          }
+
+          <nav class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-outline-secondary btn-sm" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">
+              Anterior
+            </button>
+            <span class="text-muted small">Página {{ pagina() }} de {{ totalPaginas() }}</span>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              [disabled]="pagina() >= totalPaginas()"
+              (click)="irAPagina(pagina() + 1)"
+            >
+              Siguiente
+            </button>
+          </nav>
+        }
+      }
+    </div>
+  </div>
+</div>

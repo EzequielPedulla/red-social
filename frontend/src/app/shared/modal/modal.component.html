@@ -1,0 +1,21 @@
+@if (modal.estado(); as m) {
+  <div class="overlay" (click)="modal.cerrar(false)">
+    <div class="dialogo card-soft" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <i [class]="'bi icono ' + iconos[m.tipo] + ' ' + m.tipo"></i>
+      <h5 class="mb-3">{{ m.titulo }}</h5>
+      <ul class="list-unstyled mb-4">
+        @for (msg of m.mensajes; track $index) {
+          <li>{{ msg }}</li>
+        }
+      </ul>
+      <div class="d-flex gap-2 justify-content-center">
+        @if (m.textoCancelar) {
+          <button type="button" class="btn btn-outline-secondary" (click)="modal.cerrar(false)">
+            {{ m.textoCancelar }}
+          </button>
+        }
+        <button type="button" class="btn btn-brand" (click)="modal.cerrar(true)">{{ m.textoAceptar }}</button>
+      </div>
+    </div>
+  </div>
+}

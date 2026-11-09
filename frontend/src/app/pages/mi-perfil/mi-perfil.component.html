@@ -1,0 +1,54 @@
+<div class="container py-5">
+  @if (usuario(); as u) {
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        <div class="card-soft p-4 p-md-5">
+          <div class="d-flex flex-column flex-md-row align-items-center gap-4">
+            @if (u.imagenPerfil) {
+              <img [src]="u.imagenPerfil" alt="Foto de perfil" class="avatar" />
+            } @else {
+              <div class="avatar avatar-vacio"><i class="bi bi-person-fill"></i></div>
+            }
+            <div class="text-center text-md-start">
+              <h2 class="mb-1">{{ u.nombre }} {{ u.apellido }}</h2>
+              <p class="text-muted mb-2">&#64;{{ u.nombreUsuario }}</p>
+              <span class="badge rol">{{ u.perfil === 'administrador' ? 'Administrador' : 'Usuario' }}</span>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <p class="mb-4">{{ u.descripcion }}</p>
+
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Correo</dt>
+            <dd class="col-sm-8">{{ u.correo }}</dd>
+            <dt class="col-sm-4">Nombre de usuario</dt>
+            <dd class="col-sm-8">{{ u.nombreUsuario }}</dd>
+            <dt class="col-sm-4">Fecha de nacimiento</dt>
+            <dd class="col-sm-8">{{ u.fechaNacimiento | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
+          </dl>
+        </div>
+
+        <h4 class="mt-4 mb-3">Mis últimas publicaciones</h4>
+        @for (p of ultimas(); track p.id) {
+          <app-post-card
+            [publicacion]="p"
+            [puedeEliminar]="true"
+            (alternarLike)="alternarLike($event)"
+            (eliminar)="eliminar($event)"
+          />
+        } @empty {
+          <p class="text-muted">Todavía no publicaste nada.</p>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="card-soft p-5 text-center">
+      <i class="bi bi-person-lock display-4 text-muted"></i>
+      <h5 class="mt-3">No iniciaste sesión</h5>
+      <p class="text-muted">Ingresá para ver tu perfil.</p>
+      <a routerLink="/login" class="btn btn-brand">Ingresar</a>
+    </div>
+  }
+</div>

@@ -1,0 +1,34 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 2000;
+}
+
+.dialogo {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  animation: aparecer 0.18s ease-out;
+}
+
+.icono {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+
+  &.exito { color: #16a34a; }
+  &.error { color: #dc2626; }
+  &.info { color: var(--brand); }
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}

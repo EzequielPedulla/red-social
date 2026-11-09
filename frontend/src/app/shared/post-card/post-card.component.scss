@@ -1,0 +1,27 @@
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.mensaje {
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.imagen-post {
+  display: block;
+  max-width: 100%;
+  max-height: 420px;
+  border-radius: 8px;
+  object-fit: cover;
+}

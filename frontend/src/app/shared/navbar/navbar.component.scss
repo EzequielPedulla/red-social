@@ -1,0 +1,22 @@
+.barra {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.25);
+}
+
+.marca {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+
+  &:hover { color: #fff; text-decoration: none; }
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+
+  &:hover { color: #fff; text-decoration: none; }
+  &.activo { color: #fff; background: rgba(255, 255, 255, 0.18); }
+}
+
+.saludo { color: #fff; margin-right: 0.5rem; }
