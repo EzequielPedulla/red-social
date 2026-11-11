@@ -8,7 +8,8 @@ export interface AutorPublicacion {
 
 export interface Publicacion {
   id: string;
-  usuario: AutorPublicacion;
+  // null si el autor ya no existe: la pantalla no debe romperse en ese caso
+  usuario: AutorPublicacion | null;
   titulo: string;
   mensaje: string;
   imagen: string;

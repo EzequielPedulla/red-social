@@ -1,39 +1,45 @@
 <article class="card-soft p-3 p-md-4 mb-3">
+  @let autor = publicacion().usuario;
   <header class="d-flex align-items-center gap-3 mb-3">
-    @if (publicacion().usuario.imagenPerfil) {
-      <img [src]="publicacion().usuario.imagenPerfil" alt="Foto de perfil" class="avatar" />
+    @if (autor && autor.imagenPerfil) {
+      <img [src]="autor.imagenPerfil" alt="Foto de perfil" class="avatar" />
     } @else {
       <div class="avatar avatar-vacio"><i class="bi bi-person-fill"></i></div>
     }
-    <div class="flex-grow-1">
-      <strong>{{ publicacion().usuario.nombre }} {{ publicacion().usuario.apellido }}</strong>
-      <div class="text-muted small">
-        &#64;{{ publicacion().usuario.nombreUsuario }} · {{ publicacion().createdAt | date: 'dd/MM/yyyy HH:mm' }}
-      </div>
+    <div class="flex-grow-1 autor">
+      @if (autor) {
+        <strong>{{ autor.nombre }} {{ autor.apellido }}</strong>
+        <div class="text-muted small">&#64;{{ autor.nombreUsuario }} · {{ publicacion().createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+      } @else {
+        <strong>Usuario eliminado</strong>
+        <div class="text-muted small">{{ publicacion().createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+      }
     </div>
     @if (puedeEliminar()) {
-      <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminar.emit(publicacion())">
-        <i class="bi bi-trash"></i> Eliminar
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminar.emit(publicacion())" aria-label="Eliminar publicación">
+        <i class="bi bi-trash"></i><span class="d-none d-sm-inline ms-1">Eliminar</span>
       </button>
     }
   </header>
 
-  <h5>{{ publicacion().titulo }}</h5>
+  <h5 class="titulo">{{ publicacion().titulo }}</h5>
   <p class="mensaje">{{ publicacion().mensaje }}</p>
 
   @if (publicacion().imagen) {
-    <img [src]="publicacion().imagen" alt="Imagen de la publicación" class="imagen-post mb-3" />
+    <img [src]="publicacion().imagen" alt="Imagen de la publicación" class="imagen-post mb-3" loading="lazy" />
   }
 
-  <button
-    type="button"
-    class="btn btn-sm"
-    [class.btn-brand]="publicacion().meGusta"
-    [class.btn-outline-secondary]="!publicacion().meGusta"
-    (click)="alternarLike.emit(publicacion())"
-  >
-    <i class="bi" [class.bi-heart-fill]="publicacion().meGusta" [class.bi-heart]="!publicacion().meGusta"></i>
-    {{ publicacion().cantidadLikes }}
-    {{ publicacion().meGusta ? 'Ya no me gusta' : 'Me gusta' }}
-  </button>
+  <div class="acciones">
+    <button
+      type="button"
+      class="btn-like"
+      [class.activo]="publicacion().meGusta"
+      (click)="alternarLike.emit(publicacion())"
+      [attr.aria-pressed]="publicacion().meGusta"
+    >
+      <i class="bi" [class.bi-heart-fill]="publicacion().meGusta" [class.bi-heart]="!publicacion().meGusta"></i>
+      {{ publicacion().cantidadLikes }}
+      <span>{{ publicacion().meGusta ? 'Ya no me gusta' : 'Me gusta' }}</span>
+    </button>
+  </div>
 </article>

@@ -1,71 +1,256 @@
+// ============ Tema oscuro ============
+// Bootstrap 5.3 trae modo oscuro con data-bs-theme="dark" (puesto en index.html).
+// Acá definimos nuestra paleta propia; todos los componentes usan estas variables.
 :root {
-  --brand: #4f46e5;
-  --brand-dark: #4338ca;
-  --brand-2: #9333ea;
-  --surface: #ffffff;
-  --bg: #f4f5fb;
-  --text: #1f2937;
-  --muted: #6b7280;
+  --bg: #0b0d17;
+  --bg-elevated: #121528;
+  --surface: #171a2e;
+  --surface-2: #1e2238;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e8eaf6;
+  --muted: #9aa0c3;
+
+  --brand: #7c83ff;
+  --brand-dark: #a5aaff;
+  --brand-2: #c084fc;
+  --like: #ff5d8f;
+
   --radius: 16px;
-  --shadow: 0 10px 30px rgba(79, 70, 229, 0.12);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --glow: 0 0 0 1px rgba(124, 131, 255, 0.35), 0 8px 30px rgba(124, 131, 255, 0.18);
+
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--text);
+  --bs-border-color: var(--border);
+  --bs-secondary-color: var(--muted);
+  --bs-link-color: var(--brand);
+}
+
+* {
+  scrollbar-color: #2b3050 transparent;
 }
 
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(124, 131, 255, 0.14), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(192, 132, 252, 0.1), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
-  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+
+.text-muted {
+  color: var(--muted) !important;
+}
+
+// ============ Botones ============
 .btn-brand {
-  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   border: 0;
   color: #fff;
   font-weight: 600;
   border-radius: 12px;
-  padding: 0.65rem 1.25rem;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  padding: 0.6rem 1.25rem;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s, filter 0.15s;
 
+  &.btn-sm {
+    padding: 0.35rem 0.85rem;
+  }
   &:hover:not(:disabled) {
     color: #fff;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    filter: brightness(1.08);
+    box-shadow: 0 8px 22px rgba(99, 102, 241, 0.45);
+  }
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
   &:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     color: #fff;
   }
 }
 
+.btn-outline-secondary {
+  --bs-btn-color: var(--muted);
+  --bs-btn-border-color: var(--border);
+  --bs-btn-hover-bg: var(--surface-2);
+  --bs-btn-hover-border-color: rgba(255, 255, 255, 0.18);
+  --bs-btn-hover-color: var(--text);
+  --bs-btn-active-bg: var(--surface-2);
+  --bs-btn-active-border-color: rgba(255, 255, 255, 0.18);
+  --bs-btn-active-color: var(--text);
+  --bs-btn-disabled-color: var(--muted);
+  --bs-btn-disabled-border-color: var(--border);
+  border-radius: 10px;
+}
+
+.btn-outline-danger {
+  --bs-btn-color: #ff7a8a;
+  --bs-btn-border-color: rgba(255, 122, 138, 0.35);
+  --bs-btn-hover-bg: rgba(255, 93, 120, 0.15);
+  --bs-btn-hover-border-color: #ff7a8a;
+  --bs-btn-hover-color: #ff9aa6;
+  --bs-btn-active-bg: rgba(255, 93, 120, 0.25);
+  --bs-btn-active-border-color: #ff7a8a;
+  border-radius: 10px;
+}
+
+button:focus-visible,
+a:focus-visible,
+.form-control:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+// ============ Tarjetas ============
 .card-soft {
   background: var(--surface);
-  border: 0;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
 
+// ============ Formularios ============
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
 .form-control,
 .form-select {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
   border-radius: 10px;
-  padding: 0.6rem 0.85rem;
+  padding: 0.65rem 0.9rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
 
+  &::placeholder {
+    color: #5d6385;
+  }
   &:focus {
+    background-color: var(--bg-elevated);
+    color: var(--text);
     border-color: var(--brand);
-    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.18);
+    box-shadow: 0 0 0 0.2rem rgba(124, 131, 255, 0.22);
+  }
+  &.is-invalid {
+    border-color: #ff6b7d;
+    background-image: none;
+  }
+  &::file-selector-button {
+    background: var(--surface-2);
+    color: var(--text);
+    border-color: var(--border);
   }
 }
 
 .field-error {
-  color: #dc3545;
+  color: #ff8a98;
   font-size: 0.82rem;
-  margin-top: 0.25rem;
+  margin-top: 0.3rem;
 }
 
+// ============ Links y varios ============
 a {
   color: var(--brand);
   text-decoration: none;
+  transition: color 0.15s;
   &:hover {
     color: var(--brand-dark);
     text-decoration: underline;
   }
+}
+
+hr {
+  border-color: var(--border);
+  opacity: 1;
+}
+
+.avatar {
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+// Selector segmentado (orden de publicaciones)
+.segmentado {
+  display: inline-flex;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px;
+
+  button {
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9px;
+    transition: all 0.15s;
+
+    &:hover { color: var(--text); }
+    &.activo {
+      color: #fff;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+  }
+}
+
+// Carga tipo "esqueleto"
+.esqueleto {
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--surface-2) 25%, #272c4a 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: brillo 1.2s infinite linear;
+}
+
+@keyframes brillo {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+// Aparición suave de las pantallas
+main {
+  animation: entrar 0.25s ease-out;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+// Logo de la app (llama de Forum)
+.logo-nav { border-radius: 8px; }
+.logo-auth {
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(255, 120, 60, 0.28), 0 0 0 1px var(--border);
 }

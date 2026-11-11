@@ -1,0 +1,1322 @@
+{
+  "info": {
+    "name": "Forum - Sprints 1 y 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Orden sugerido: 1) Login (guarda el token solo en {{token}}), 2) el resto. Los usuarios demo se crean con `npm run seed` (contraseña Demo1234)."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "usuarioId",
+      "value": ""
+    },
+    {
+      "key": "publicacionId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - Autenticación",
+      "item": [
+        {
+          "name": "Login por nombre de usuario - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('token', r.token);",
+                  "pm.collectionVariables.set('usuarioId', r.usuario.id);",
+                  "pm.test('Devuelve token y datos del usuario sin password', () => { pm.expect(r.token).to.be.a('string'); pm.expect(r.usuario).to.not.have.property('password'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificador\": \"demo_lucia\",\n  \"password\": \"Demo1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Guarda el token en {{token}}: el resto de las peticiones ya lo usan."
+          }
+        },
+        {
+          "name": "Login como ADMIN - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('token', r.token);",
+                  "pm.collectionVariables.set('usuarioId', r.usuario.id);",
+                  "pm.test('Devuelve token y datos del usuario sin password', () => { pm.expect(r.token).to.be.a('string'); pm.expect(r.usuario).to.not.have.property('password'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificador\": \"demo_admin\",\n  \"password\": \"Demo1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Login por correo - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.collectionVariables.set('token', r.token);",
+                  "pm.collectionVariables.set('usuarioId', r.usuario.id);",
+                  "pm.test('Devuelve token y datos del usuario sin password', () => { pm.expect(r.token).to.be.a('string'); pm.expect(r.usuario).to.not.have.property('password'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificador\": \"demo_martin@demo.com\",\n  \"password\": \"Demo1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Login contraseña incorrecta - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificador\": \"demo_lucia\",\n  \"password\": \"Incorrecta1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Registro - 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Prueba",
+                  "type": "text"
+                },
+                {
+                  "key": "apellido",
+                  "value": "Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "correo",
+                  "value": "postman1@mail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "nombreUsuario",
+                  "value": "postman1",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "repetirPassword",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "fechaNacimiento",
+                  "value": "2000-05-10",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Usuario creado desde Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "imagen",
+                  "type": "file",
+                  "src": [],
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            },
+            "description": "Si el usuario ya existe da 409: cambiá nombreUsuario y correo. La imagen es opcional (tildá el campo y elegí un archivo)."
+          }
+        },
+        {
+          "name": "Registro repetido - 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Dup",
+                  "type": "text"
+                },
+                {
+                  "key": "apellido",
+                  "value": "Dup",
+                  "type": "text"
+                },
+                {
+                  "key": "correo",
+                  "value": "demo_lucia@demo.com",
+                  "type": "text"
+                },
+                {
+                  "key": "nombreUsuario",
+                  "value": "otro_usuario",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "repetirPassword",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "fechaNacimiento",
+                  "value": "2000-05-10",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "x",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Registro contraseña débil - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "A",
+                  "type": "text"
+                },
+                {
+                  "key": "apellido",
+                  "value": "B",
+                  "type": "text"
+                },
+                {
+                  "key": "correo",
+                  "value": "debil@mail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "nombreUsuario",
+                  "value": "debil1",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "abc",
+                  "type": "text"
+                },
+                {
+                  "key": "repetirPassword",
+                  "value": "abc",
+                  "type": "text"
+                },
+                {
+                  "key": "fechaNacimiento",
+                  "value": "2000-05-10",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "x",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Registro intentando ser admin - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Prueba",
+                  "type": "text"
+                },
+                {
+                  "key": "apellido",
+                  "value": "Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "correo",
+                  "value": "postman1@mail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "nombreUsuario",
+                  "value": "postman1",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "repetirPassword",
+                  "value": "Hola1234",
+                  "type": "text"
+                },
+                {
+                  "key": "fechaNacimiento",
+                  "value": "2000-05-10",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Usuario creado desde Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "perfil",
+                  "value": "administrador",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            },
+            "description": "El campo perfil está prohibido en el registro (forbidNonWhitelisted)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - Publicaciones",
+      "item": [
+        {
+          "name": "Listar (por fecha, por defecto) - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.test('Tiene items, total, offset y limit', () => pm.expect(r).to.have.all.keys('items', 'total', 'offset', 'limit'));",
+                  "pm.test('Ordenado por fecha descendente', () => { const f = r.items.map(i => new Date(i.createdAt)); pm.expect(f.every((d, i) => i === 0 || f[i - 1] >= d)).to.be.true; });",
+                  "if (r.items.length) pm.collectionVariables.set('publicacionId', r.items[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": "También guarda el id de la primera publicación en {{publicacionId}} para las pruebas de me gusta y eliminar."
+          }
+        },
+        {
+          "name": "Listar ordenado por me gusta - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const l = pm.response.json().items.map(i => i.cantidadLikes);",
+                  "pm.test('Ordenado por cantidad de me gusta', () => pm.expect(l.every((n, i) => i === 0 || l[i - 1] >= n)).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?orden=likes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "orden",
+                  "value": "likes"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Paginación: página 2 (offset=10, limit=10) - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?offset=10&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "10"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Filtrar por usuario (el del último login) - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Todas son del usuario', () => pm.response.json().items.every(i => i.usuario.id === pm.collectionVariables.get('usuarioId')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?usuario={{usuarioId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "usuario",
+                  "value": "{{usuarioId}}"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Últimas 3 de un usuario (lo que usa Mi Perfil) - 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?usuario={{usuarioId}}&orden=fecha&limit=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "usuario",
+                  "value": "{{usuarioId}}"
+                },
+                {
+                  "key": "orden",
+                  "value": "fecha"
+                },
+                {
+                  "key": "limit",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Listar sin token - 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Listar con orden inválido - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?orden=xx",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "orden",
+                  "value": "xx"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Listar con limit=500 (máximo 50) - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones?limit=500",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "500"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Crear sin imagen - 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('publicacionId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "titulo",
+                  "value": "[Demo] Creada desde Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "mensaje",
+                  "value": "Publicación de prueba sin imagen",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Crear con imagen - 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene URL de imagen', () => pm.expect(pm.response.json().imagen).to.include('http'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "titulo",
+                  "value": "[Demo] Con imagen desde Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "mensaje",
+                  "value": "Elegí un archivo en el campo imagen",
+                  "type": "text"
+                },
+                {
+                  "key": "imagen",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": "En el campo imagen (columna Value) elegí un JPG/PNG/WEBP/GIF de hasta 3MB."
+          }
+        },
+        {
+          "name": "Crear sin título - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "mensaje",
+                  "value": "falta el título",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Crear con campo extra - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "titulo",
+                  "value": "a",
+                  "type": "text"
+                },
+                {
+                  "key": "mensaje",
+                  "value": "b",
+                  "type": "text"
+                },
+                {
+                  "key": "usuario",
+                  "value": "otro",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones"
+              ]
+            },
+            "description": "No se puede elegir el autor: sale del token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Me gusta",
+      "item": [
+        {
+          "name": "Dar me gusta - 201 (si ya lo diste, 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 o 409', () => pm.expect([201, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones/{{publicacionId}}/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones",
+                "{{publicacionId}}",
+                "like"
+              ]
+            },
+            "description": "Usa {{publicacionId}}. Primera vez 201; repetido 409."
+          }
+        },
+        {
+          "name": "Quitar me gusta - 200 (si no lo habías dado, 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 o 409', () => pm.expect([200, 409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones/{{publicacionId}}/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones",
+                "{{publicacionId}}",
+                "like"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Me gusta con id inválido - 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones/abc/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones",
+                "abc",
+                "like"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Me gusta a publicación inexistente - 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones/507f1f77bcf86cd799439011/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones",
+                "507f1f77bcf86cd799439011",
+                "like"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - Eliminar (baja lógica)",
+      "item": [
+        {
+          "name": "Eliminar publicación - 204 / 403 / 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 o 403 o 404', () => pm.expect([204, 403, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/publicaciones/{{publicacionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "publicaciones",
+                "{{publicacionId}}"
+              ]
+            },
+            "description": "Con el token del autor o de demo_admin: 204. Con el token de otro usuario: 403. Si ya estaba eliminada: 404."
+          }
+        }
+      ]
+    }
+  ]
+}

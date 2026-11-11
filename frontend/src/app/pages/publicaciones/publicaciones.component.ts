@@ -136,7 +136,7 @@ export class PublicacionesComponent {
   }
 
   puedeEliminar(p: Publicacion): boolean {
-    return this.auth.esAdmin() || p.usuario.id === this.auth.usuario()?.id;
+    return this.auth.esAdmin() || p.usuario?.id === this.auth.usuario()?.id;
   }
 
   async eliminar(p: Publicacion): Promise<void> {

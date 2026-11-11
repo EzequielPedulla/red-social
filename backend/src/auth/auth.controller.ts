@@ -17,6 +17,7 @@ export class AuthController {
     @Body() dto: RegisterDto,
     @UploadedFile(
       new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: /^image\/(jpeg|png|webp|gif)$/ })
         .addMaxSizeValidator({ maxSize: 3 * 1024 * 1024 })
         .build({ fileIsRequired: false, errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
     )
