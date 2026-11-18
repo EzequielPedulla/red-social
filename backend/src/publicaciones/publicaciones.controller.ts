@@ -38,6 +38,12 @@ export class PublicacionesController {
     return this.publicaciones.listar(filtros, usuario.id);
   }
 
+  // Una publicación puntual (página de detalle)
+  @Get(':id')
+  uno(@Param('id', ParseObjectIdPipe) id: string, @UsuarioActual() usuario: UsuarioActual) {
+    return this.publicaciones.obtener(id, usuario.id);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   eliminar(@Param('id', ParseObjectIdPipe) id: string, @UsuarioActual() usuario: UsuarioActual) {

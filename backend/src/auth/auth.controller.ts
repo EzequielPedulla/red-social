@@ -1,7 +1,9 @@
 import {
-  Body, Controller, HttpCode, HttpStatus, ParseFilePipeBuilder, Post, UploadedFile, UseInterceptors,
+  Body, Controller, HttpCode, HttpStatus, ParseFilePipeBuilder, Post, UploadedFile, UseGuards, UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from './jwt-auth.guard.js';
+import { UsuarioActual } from './usuario-actual.decorator.js';
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
@@ -30,5 +32,21 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto);
+  }
+
+  // 401 si el token es inválido o venció; si es válido devuelve los datos del usuario
+  @UseGuards(JwtAuthGuard)
+  @Post('autorizar')
+  @HttpCode(HttpStatus.OK)
+  autorizar(@UsuarioActual() actual: UsuarioActual) {
+    return this.auth.autorizar(actual.id);
+  }
+
+  // Devuelve un token nuevo con el mismo payload y 15 minutos de vida
+  @UseGuards(JwtAuthGuard)
+  @Post('refrescar')
+  @HttpCode(HttpStatus.OK)
+  refrescar(@UsuarioActual() actual: UsuarioActual) {
+    return this.auth.refrescar(actual.id, actual.perfil);
   }
 }

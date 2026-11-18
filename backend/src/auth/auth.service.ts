@@ -42,6 +42,23 @@ export class AuthService {
     return { usuario, token: this.firmarToken(usuario.id, usuario.perfil) };
   }
 
+  // POST /auth/autorizar: el guard ya validó firma y vencimiento; acá se confirma que el usuario siga habilitado
+  async autorizar(id: string) {
+    return { usuario: await this.usuarioHabilitado(id) };
+  }
+
+  // POST /auth/refrescar: mismo payload, nuevo vencimiento de 15 minutos
+  async refrescar(id: string, perfil: string) {
+    await this.usuarioHabilitado(id);
+    return { token: this.firmarToken(id, perfil) };
+  }
+
+  private async usuarioHabilitado(id: string) {
+    const usuario = await this.usuarios.buscarPorId(id).catch(() => null);
+    if (!usuario || !usuario.activo) throw new UnauthorizedException('Sesión no válida');
+    return usuario;
+  }
+
   private firmarToken(id: string, perfil: string): string {
     return this.jwt.sign({ sub: id, perfil });
   }

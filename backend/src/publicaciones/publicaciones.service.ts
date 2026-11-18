@@ -97,7 +97,7 @@ export class PublicacionesService {
     return this.obtener(id, usuarioId);
   }
 
-  private async obtener(id: string, usuarioId: string) {
+  async obtener(id: string, usuarioId: string) {
     const p = await this.modelo
       .findOne({ _id: id, activo: true })
       .populate('usuario', CAMPOS_AUTOR)
