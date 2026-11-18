@@ -12,13 +12,19 @@
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label" for="nombre">Nombre</label>
-              <input id="nombre" class="form-control" formControlName="nombre" [class.is-invalid]="mostrarError('nombre')" />
-              @if (mostrarError('nombre')) { <div class="field-error">{{ mensaje('nombre') }}</div> }
+              <input id="nombre" class="form-control" formControlName="nombre" maxlength="50" [class.is-invalid]="mostrarError('nombre')" />
+              <div class="d-flex justify-content-between gap-2">
+                @if (mostrarError('nombre')) { <div class="field-error">{{ mensaje('nombre') }}</div> } @else { <span></span> }
+                <app-contador [valor]="form.controls.nombre.value" [max]="50" />
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label" for="apellido">Apellido</label>
-              <input id="apellido" class="form-control" formControlName="apellido" [class.is-invalid]="mostrarError('apellido')" />
-              @if (mostrarError('apellido')) { <div class="field-error">{{ mensaje('apellido') }}</div> }
+              <input id="apellido" class="form-control" formControlName="apellido" maxlength="50" [class.is-invalid]="mostrarError('apellido')" />
+              <div class="d-flex justify-content-between gap-2">
+                @if (mostrarError('apellido')) { <div class="field-error">{{ mensaje('apellido') }}</div> } @else { <span></span> }
+                <app-contador [valor]="form.controls.apellido.value" [max]="50" />
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -28,8 +34,11 @@
             </div>
             <div class="col-md-6">
               <label class="form-label" for="nombreUsuario">Nombre de usuario</label>
-              <input id="nombreUsuario" class="form-control" formControlName="nombreUsuario" [class.is-invalid]="mostrarError('nombreUsuario')" />
-              @if (mostrarError('nombreUsuario')) { <div class="field-error">{{ mensaje('nombreUsuario') }}</div> }
+              <input id="nombreUsuario" class="form-control" formControlName="nombreUsuario" maxlength="30" [class.is-invalid]="mostrarError('nombreUsuario')" />
+              <div class="d-flex justify-content-between gap-2">
+                @if (mostrarError('nombreUsuario')) { <div class="field-error">{{ mensaje('nombreUsuario') }}</div> } @else { <span></span> }
+                <app-contador [valor]="form.controls.nombreUsuario.value" [max]="30" />
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -68,10 +77,10 @@
 
             <div class="col-12">
               <label class="form-label" for="descripcion">Descripción breve</label>
-              <textarea id="descripcion" rows="3" class="form-control" formControlName="descripcion" [class.is-invalid]="mostrarError('descripcion')"></textarea>
+              <textarea id="descripcion" rows="3" maxlength="200" class="form-control" formControlName="descripcion" [class.is-invalid]="mostrarError('descripcion')"></textarea>
               <div class="d-flex justify-content-between">
                 @if (mostrarError('descripcion')) { <div class="field-error">{{ mensaje('descripcion') }}</div> } @else { <span></span> }
-                <small class="text-muted">{{ form.controls.descripcion.value.length }}/200</small>
+                <app-contador [valor]="form.controls.descripcion.value" [max]="200" />
               </div>
             </div>
           </div>

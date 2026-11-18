@@ -24,15 +24,44 @@ article {
 
 .autor {
   line-height: 1.25;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .titulo {
   font-size: 1.15rem;
   margin-bottom: 0.4rem;
+  // Un título largo (o una palabra sin espacios) se parte en varias líneas en vez de desbordar la card
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.titulo a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.titulo-grande {
+  font-size: 1.6rem;
+}
+
+.btn-comentarios {
+  text-decoration: none;
+
+  &:hover {
+    color: var(--brand);
+    border-color: rgba(124, 131, 255, 0.5);
+    background: rgba(124, 131, 255, 0.08);
+  }
 }
 
 .mensaje {
   white-space: pre-line;
+  overflow-wrap: anywhere;
   word-break: break-word;
   color: #cfd3ee;
   margin-bottom: 1rem;

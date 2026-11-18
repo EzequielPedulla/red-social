@@ -6,6 +6,7 @@ import { OrdenPublicaciones, Publicacion } from '../../core/models/publicacion.m
 import { AuthService } from '../../core/services/auth.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
 import { mensajesDeError } from '../../core/utils/errores';
+import { ContadorComponent } from '../../shared/contador/contador.component';
 import { ModalService } from '../../shared/modal/modal.service';
 import { PostCardComponent } from '../../shared/post-card/post-card.component';
 
@@ -13,7 +14,7 @@ const POR_PAGINA = 10;
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [ReactiveFormsModule, RouterLink, PostCardComponent],
+  imports: [ReactiveFormsModule, RouterLink, PostCardComponent, ContadorComponent],
   templateUrl: './publicaciones.component.html',
 })
 export class PublicacionesComponent {

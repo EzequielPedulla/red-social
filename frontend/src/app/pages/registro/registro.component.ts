@@ -5,6 +5,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { mensajesDeError } from '../../core/utils/errores';
+import { ContadorComponent } from '../../shared/contador/contador.component';
 import { ModalService } from '../../shared/modal/modal.service';
 import { REGEX_PASSWORD } from '../login/login.component';
 
@@ -25,7 +26,7 @@ type Campo =
 
 @Component({
   selector: 'app-registro',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ContadorComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss',
 })

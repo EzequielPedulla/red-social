@@ -16,6 +16,9 @@
                 <p class="text-muted mb-2">&#64;{{ u.nombreUsuario }}</p>
                 <span class="badge rol">{{ u.perfil === 'administrador' ? 'Administrador' : 'Usuario' }}</span>
               </div>
+              <a routerLink="/mi-perfil/editar" class="btn btn-brand btn-sm ms-md-auto">
+                <i class="bi bi-pencil-square me-1"></i>Editar perfil
+              </a>
             </div>
 
             @if (u.descripcion) {

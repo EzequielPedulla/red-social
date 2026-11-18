@@ -1,0 +1,83 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      @if (auth.usuario(); as u) {
+        <div class="card-soft p-4 p-md-5">
+          <h2 class="mb-4"><i class="bi bi-pencil-square me-2 text-muted"></i>Editar perfil</h2>
+
+          <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="nombre">Nombre</label>
+                <input id="nombre" class="form-control" formControlName="nombre" maxlength="50" [class.is-invalid]="invalido('nombre')" />
+                <div class="d-flex justify-content-between gap-2">
+                  @if (invalido('nombre')) { <div class="field-error">El nombre es obligatorio.</div> } @else { <span></span> }
+                  <app-contador [valor]="form.controls.nombre.value" [max]="50" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="apellido">Apellido</label>
+                <input id="apellido" class="form-control" formControlName="apellido" maxlength="50" [class.is-invalid]="invalido('apellido')" />
+                <div class="d-flex justify-content-between gap-2">
+                  @if (invalido('apellido')) { <div class="field-error">El apellido es obligatorio.</div> } @else { <span></span> }
+                  <app-contador [valor]="form.controls.apellido.value" [max]="50" />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="nombreUsuario">Nombre de usuario</label>
+                <input id="nombreUsuario" class="form-control" formControlName="nombreUsuario" maxlength="30" [class.is-invalid]="invalido('nombreUsuario')" />
+                <div class="d-flex justify-content-between gap-2">
+                  @if (invalido('nombreUsuario')) {
+                    <div class="field-error">Entre 3 y 30 caracteres: letras, números, _ y .</div>
+                  } @else { <span></span> }
+                  <app-contador [valor]="form.controls.nombreUsuario.value" [max]="30" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="fechaNacimiento">Fecha de nacimiento</label>
+                <input id="fechaNacimiento" type="date" class="form-control" formControlName="fechaNacimiento"
+                  [max]="hoy" [class.is-invalid]="invalido('fechaNacimiento')" />
+                @if (invalido('fechaNacimiento')) { <div class="field-error">Ingresá una fecha válida.</div> }
+              </div>
+
+              <div class="col-12">
+                <label class="form-label" for="imagen">Imagen de perfil <span class="text-muted">(dejá vacío para conservar la actual)</span></label>
+                <input id="imagen" type="file" accept="image/*" class="form-control" [class.is-invalid]="errorImagen()" (change)="alElegirImagen($event)" />
+                @if (errorImagen()) { <div class="field-error">{{ errorImagen() }}</div> }
+              </div>
+
+              @if (vistaPrevia() || u.imagenPerfil) {
+                <div class="col-12 text-center">
+                  <img [src]="vistaPrevia() || u.imagenPerfil" alt="Vista previa" class="previa" />
+                </div>
+              }
+
+              <div class="col-12">
+                <label class="form-label" for="descripcion">Descripción breve</label>
+                <textarea id="descripcion" rows="3" maxlength="200" class="form-control" formControlName="descripcion" [class.is-invalid]="invalido('descripcion')"></textarea>
+                <div class="d-flex justify-content-between gap-2">
+                  @if (invalido('descripcion')) { <div class="field-error">La descripción es obligatoria (máx. 200).</div> } @else { <span></span> }
+                  <app-contador [valor]="form.controls.descripcion.value" [max]="200" />
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end mt-4">
+              <a routerLink="/mi-perfil" class="btn btn-outline-secondary">Cancelar</a>
+              <button type="submit" class="btn btn-brand" [disabled]="enviando()">
+                {{ enviando() ? 'Guardando...' : 'Guardar cambios' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      } @else {
+        <div class="card-soft p-5 text-center">
+          <i class="bi bi-person-lock display-4 text-muted"></i>
+          <h5 class="mt-3">No iniciaste sesión</h5>
+          <a routerLink="/login" class="btn btn-brand mt-2">Ingresar</a>
+        </div>
+      }
+    </div>
+  </div>
+</div>

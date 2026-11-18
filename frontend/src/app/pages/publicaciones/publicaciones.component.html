@@ -16,17 +16,23 @@
           <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
             <input id="titulo" class="form-control" formControlName="titulo" maxlength="100" />
-            @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
-              <div class="field-error">El título es obligatorio (máx. 100 caracteres)</div>
-            }
+            <div class="d-flex justify-content-between gap-2">
+              @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+                <div class="field-error">El título es obligatorio (máx. 100 caracteres)</div>
+              } @else { <span></span> }
+              <app-contador [valor]="form.controls.titulo.value" [max]="100" />
+            </div>
           </div>
 
           <div class="mb-3">
             <label for="mensaje" class="form-label">Mensaje</label>
             <textarea id="mensaje" class="form-control" rows="3" formControlName="mensaje" maxlength="1000"></textarea>
-            @if (form.controls.mensaje.touched && form.controls.mensaje.invalid) {
-              <div class="field-error">El mensaje es obligatorio (máx. 1000 caracteres)</div>
-            }
+            <div class="d-flex justify-content-between gap-2">
+              @if (form.controls.mensaje.touched && form.controls.mensaje.invalid) {
+                <div class="field-error">El mensaje es obligatorio (máx. 1000 caracteres)</div>
+              } @else { <span></span> }
+              <app-contador [valor]="form.controls.mensaje.value" [max]="1000" />
+            </div>
           </div>
 
           <div class="mb-3">

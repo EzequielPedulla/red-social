@@ -18,6 +18,10 @@ export class PublicacionesService {
     return this.http.get<PaginaPublicaciones>(this.api, { params });
   }
 
+  obtener(id: string) {
+    return this.http.get<Publicacion>(`${this.api}/${id}`);
+  }
+
   // multipart/form-data porque puede llevar una imagen
   crear(datos: FormData) {
     return this.http.post<Publicacion>(this.api, datos);

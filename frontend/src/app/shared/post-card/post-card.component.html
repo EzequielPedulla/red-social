@@ -22,7 +22,11 @@
     }
   </header>
 
-  <h5 class="titulo">{{ publicacion().titulo }}</h5>
+  @if (grande()) {
+    <h3 class="titulo titulo-grande">{{ publicacion().titulo }}</h3>
+  } @else {
+    <h5 class="titulo"><a [routerLink]="['/publicaciones', publicacion().id]">{{ publicacion().titulo }}</a></h5>
+  }
   <p class="mensaje">{{ publicacion().mensaje }}</p>
 
   @if (publicacion().imagen) {
@@ -41,5 +45,10 @@
       {{ publicacion().cantidadLikes }}
       <span>{{ publicacion().meGusta ? 'Ya no me gusta' : 'Me gusta' }}</span>
     </button>
+    @if (!grande()) {
+      <a class="btn-like btn-comentarios" [routerLink]="['/publicaciones', publicacion().id]">
+        <i class="bi bi-chat-dots"></i> Comentarios
+      </a>
+    }
   </div>
 </article>

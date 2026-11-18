@@ -1,0 +1,121 @@
+<div class="container py-4 py-md-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-9 col-xl-8">
+      @let p = publicacion();
+      <a routerLink="/publicaciones" class="volver"><i class="bi bi-arrow-left me-1"></i>Volver a publicaciones</a>
+
+      @if (!auth.logueado()) {
+        <div class="card-soft p-5 text-center mt-3">
+          <i class="bi bi-person-lock display-4 text-muted"></i>
+          <h5 class="mt-3">Ingresá para ver la publicación</h5>
+          <a routerLink="/login" class="btn btn-brand mt-2">Ingresar</a>
+        </div>
+      } @else if (noEncontrada()) {
+        <div class="card-soft p-5 text-center mt-3">
+          <i class="bi bi-emoji-frown display-4 text-muted"></i>
+          <h5 class="mt-3">La publicación no existe o fue eliminada</h5>
+          <a routerLink="/publicaciones" class="btn btn-brand mt-2">Ver publicaciones</a>
+        </div>
+      } @else if (p) {
+        <div class="mt-3">
+          <app-post-card
+            [publicacion]="p"
+            [grande]="true"
+            [puedeEliminar]="puedeEliminar(p)"
+            (alternarLike)="alternarLike($event)"
+            (eliminar)="eliminar($event)"
+          />
+        </div>
+
+        <section class="mt-4" aria-labelledby="titulo-comentarios">
+          <h4 id="titulo-comentarios" class="mb-3">
+            <i class="bi bi-chat-dots me-2 text-muted"></i>Comentarios
+            <span class="text-muted fs-6">({{ total() }})</span>
+          </h4>
+
+          <form class="card-soft p-3 mb-3" (submit)="$event.preventDefault(); comentar()" novalidate>
+            <label for="nuevo" class="visually-hidden">Escribí un comentario</label>
+            <textarea
+              id="nuevo"
+              class="form-control"
+              rows="2"
+              maxlength="500"
+              placeholder="Escribí un comentario..."
+              [formControl]="nuevo"
+            ></textarea>
+            <div class="d-flex justify-content-between align-items-center mt-2 gap-2">
+              <app-contador [valor]="nuevo.value" [max]="max" />
+              <button type="submit" class="btn btn-brand btn-sm" [disabled]="enviando() || nuevo.invalid">
+                {{ enviando() ? 'Enviando...' : 'Comentar' }}
+              </button>
+            </div>
+          </form>
+
+          @for (c of comentarios(); track c.id) {
+            <article class="card-soft comentario p-3 mb-2">
+              <header class="d-flex align-items-center gap-2 mb-2">
+                @if (c.usuario?.imagenPerfil) {
+                  <img [src]="c.usuario?.imagenPerfil" alt="" class="mini-avatar" />
+                } @else {
+                  <div class="mini-avatar vacio"><i class="bi bi-person-fill"></i></div>
+                }
+                <div class="flex-grow-1 autor">
+                  <strong>{{ c.usuario ? c.usuario.nombre + ' ' + c.usuario.apellido : 'Usuario eliminado' }}</strong>
+                  <div class="text-muted small">
+                    @if (c.usuario) { &#64;{{ c.usuario.nombreUsuario }} · }{{ c.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                    @if (c.modificado) {
+                      <span class="editado" title="Editado el {{ c.updatedAt | date: 'dd/MM/yyyy HH:mm' }}">· (editado)</span>
+                    }
+                  </div>
+                </div>
+                @if (esMio(c) && editandoId() !== c.id) {
+                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="editar(c)" aria-label="Editar comentario">
+                    <i class="bi bi-pencil"></i><span class="d-none d-sm-inline ms-1">Editar</span>
+                  </button>
+                }
+              </header>
+
+              @if (editandoId() === c.id) {
+                <textarea class="form-control" rows="2" maxlength="500" [formControl]="edicion" aria-label="Editar comentario"></textarea>
+                <div class="d-flex justify-content-between align-items-center mt-2 gap-2">
+                  <app-contador [valor]="edicion.value" [max]="max" />
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelarEdicion()">Cancelar</button>
+                    <button type="button" class="btn btn-brand btn-sm" [disabled]="guardando() || edicion.invalid" (click)="guardarEdicion(c)">
+                      {{ guardando() ? 'Guardando...' : 'Guardar' }}
+                    </button>
+                  </div>
+                </div>
+              } @else {
+                <p class="texto mb-0">{{ c.mensaje }}</p>
+              }
+            </article>
+          } @empty {
+            @if (!cargandoMas()) {
+              <div class="card-soft p-4 text-center text-muted">Todavía no hay comentarios. ¡Escribí el primero!</div>
+            }
+          }
+
+          @if (cargandoMas() && comentarios().length === 0) {
+            <div class="card-soft p-3 mb-2"><div class="esqueleto" style="height: 14px; width: 70%"></div></div>
+          }
+
+          @if (quedan()) {
+            <div class="text-center mt-3">
+              <button type="button" class="btn btn-outline-secondary" [disabled]="cargandoMas()" (click)="cargarComentarios()">
+                {{ cargandoMas() ? 'Cargando...' : 'Cargar más comentarios' }}
+              </button>
+              <div class="text-muted small mt-1">Mostrando {{ comentarios().length }} de {{ total() }}</div>
+            </div>
+          }
+        </section>
+      } @else {
+        <div class="card-soft p-4 mt-3">
+          <div class="esqueleto" style="height: 22px; width: 50%"></div>
+          <div class="esqueleto mt-3" style="height: 14px; width: 90%"></div>
+          <div class="esqueleto mt-2" style="height: 14px; width: 70%"></div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

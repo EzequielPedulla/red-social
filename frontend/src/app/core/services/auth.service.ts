@@ -30,6 +30,36 @@ export class AuthService {
       .pipe(tap((r) => this.guardarSesion(r)));
   }
 
+  // Valida el token guardado contra el back (401 si es inválido o venció) y trae los datos del usuario
+  autorizar() {
+    return this.http.post<{ usuario: Usuario }>(`${this.api}/autorizar`, {}).pipe(
+      tap((r) => {
+        this.usuario.set(r.usuario);
+        this.escribir(CLAVE_USUARIO, JSON.stringify(r.usuario));
+      }),
+    );
+  }
+
+  // Cambia el token por uno nuevo con 15 minutos de vida
+  refrescar() {
+    return this.http.post<{ token: string }>(`${this.api}/refrescar`, {}).pipe(
+      tap((r) => {
+        this.token.set(r.token);
+        this.escribir(CLAVE_TOKEN, r.token);
+      }),
+    );
+  }
+
+  // Edición de perfil: devuelve el usuario actualizado y lo refleja en la sesión (navbar, perfil)
+  actualizarPerfil(datos: FormData) {
+    return this.http.patch<Usuario>(`${environment.apiUrl}/usuarios/me`, datos).pipe(
+      tap((u) => {
+        this.usuario.set(u);
+        this.escribir(CLAVE_USUARIO, JSON.stringify(u));
+      }),
+    );
+  }
+
   logout(): void {
     this.token.set(null);
     this.usuario.set(null);
